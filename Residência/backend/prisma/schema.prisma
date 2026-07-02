@@ -1,0 +1,173 @@
+// This is your Prisma schema file
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organizador {
+  id             Int       @id @default(autoincrement())
+  nome           String
+  email          String    @unique
+  senha          String
+  dataCadastro   DateTime  @default(now())
+
+  jogadores      Jogador[]
+  peladas        Pelada[]
+}
+
+model Jogador {
+  id                     Int      @id @default(autoincrement())
+  nome                   String
+  nivel_estrelas         Float    @default(3.0)
+  ativo                  Boolean  @default(true)
+  dataCadastro           DateTime @default(now())
+
+  organizadorId          Int
+  organizador            Organizador @relation(fields: [organizadorId], references: [id])
+
+  peladas                PeladaJogador[]
+  times                  TimeJogador[]
+
+  eventos                EventoJogo[] @relation("JogadorEvento")
+  assistenciasEventos    EventoJogo[] @relation("AssistenciaEvento")
+  estatisticasPelada     EstatisticaJogadorPelada?
+}
+
+model Pelada {
+  id                     Int      @id @default(autoincrement())
+
+  titulo                 String?
+  data_hora              DateTime
+  local                  String
+  duracao_minutos        Int
+
+  jogadores_por_time     Int
+  times_simultaneos      Int
+
+  valor_por_jogador      Float?
+  config_pagamento_visivel Boolean @default(false)
+
+  status                 String   @default("agendada")
+
+  placar_time1           Int      @default(0)
+  placar_time2           Int      @default(0)
+
+  tempo_restante         Int?
+  cronometro_ativo       Boolean  @default(false)
+
+  organizador_id         Int
+  organizador            Organizador @relation(fields: [organizador_id], references: [id])
+
+  jogadores              PeladaJogador[]
+  times                  TimePelada[]
+  eventos                EventoJogo[]
+
+  createdAt              DateTime @default(now())
+}
+
+model PeladaJogador {
+  id                     Int      @id @default(autoincrement())
+
+  pelada_id              Int
+  jogador_id             Int
+
+  ordem_chegada          Int
+
+  presenca_confirmada    Boolean  @default(false)
+  pagamento_confirmado   Boolean  @default(false)
+
+  pelada                 Pelada @relation(fields: [pelada_id], references: [id], onDelete: Cascade)
+
+  jogador                Jogador @relation(fields: [jogador_id], references: [id])
+
+  @@unique([pelada_id, jogador_id])
+}
+
+model TimePelada {
+  id                     Int      @id @default(autoincrement())
+
+  nome_time              String
+  cor                    String?
+
+  soma_estrelas          Float
+
+  pelada_id              Int
+
+  gols                   Int      @default(0)
+
+  ordem                  Int
+  em_jogo                Boolean  @default(false)
+
+  pelada                 Pelada @relation(fields: [pelada_id], references: [id], onDelete: Cascade)
+
+  jogadores              TimeJogador[]
+  eventos                EventoJogo[]
+}
+
+model TimeJogador {
+  id                     Int      @id @default(autoincrement())
+
+  time_id                Int
+  jogador_id             Int
+
+  time                   TimePelada @relation(fields: [time_id], references: [id], onDelete: Cascade)
+
+  jogador                Jogador @relation(fields: [jogador_id], references: [id])
+
+  @@unique([time_id, jogador_id])
+}
+
+model EventoJogo {
+  id                         Int      @id @default(autoincrement())
+
+  pelada_id                  Int
+
+  pelada                     Pelada @relation(fields: [pelada_id], references: [id], onDelete: Cascade)
+
+  tipo                       String
+  // gol
+  // cartao_amarelo
+  // cartao_vermelho
+
+  time_id                    Int
+
+  time                       TimePelada @relation(fields: [time_id], references: [id], onDelete: Cascade)
+
+  jogador_id                 Int
+
+  jogador                    Jogador @relation("JogadorEvento", fields: [jogador_id], references: [id])
+
+  jogador_assistencia_id     Int?
+
+  jogadorAssistencia         Jogador? @relation("AssistenciaEvento", fields: [jogador_assistencia_id], references: [id])
+
+  minuto                     Int
+
+  created_at                 DateTime @default(now())
+}
+
+model EstatisticaJogadorPelada {
+  id                  Int      @id @default(autoincrement())
+
+  jogadorId           Int      @unique
+  jogador             Jogador  @relation(fields: [jogadorId], references: [id])
+
+  totalJogos          Int      @default(0)
+  totalGols           Int      @default(0)
+  totalAssistencias   Int      @default(0)
+
+  totalVitorias       Int      @default(0)
+  totalEmpates        Int      @default(0)
+  totalDerrotas       Int      @default(0)
+
+  mediaGols           Float    @default(0)
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}

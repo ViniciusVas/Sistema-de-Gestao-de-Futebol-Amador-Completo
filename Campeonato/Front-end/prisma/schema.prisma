@@ -1,0 +1,192 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  name          String
+  password      String
+  createdAt     DateTime       @default(now())
+  players       Player[]
+  peladas       Pelada[]
+  championships Championship[]
+}
+
+model Championship {
+  id                String           @id @default(uuid())
+  name              String
+  description       String?
+  startDate         DateTime?
+  endDate           DateTime?
+  format            String           @default("pontos_corridos") // pontos_corridos, grupos_mata
+  isHomeAndAway     Boolean          @default(false)
+  status            String           @default("rascunho") // rascunho, ativo, encerrado
+  userId            String
+  user              User             @relation(fields: [userId], references: [id])
+  createdAt         DateTime         @default(now())
+  times             TimeCampeonato[]
+  jogos             JogoCampeonato[]
+}
+
+model TimeCampeonato {
+  id             String        @id @default(uuid())
+  name           String
+  logoUrl        String?
+  color          String?
+  championshipId String
+  championship   Championship  @relation(fields: [championshipId], references: [id])
+  jogadores      JogadorTime[]
+  jogosMandante  JogoCampeonato[] @relation("HomeTeam")
+  jogosVisitante JogoCampeonato[] @relation("AwayTeam")
+  eventos        EventoCampeonato[]
+}
+
+model JogadorTime {
+  id      String         @id @default(uuid())
+  timeId  String
+  time    TimeCampeonato @relation(fields: [timeId], references: [id])
+  playerId String
+  player  Player         @relation(fields: [playerId], references: [id])
+}
+
+model JogoCampeonato {
+  id             String         @id @default(uuid())
+  championshipId String
+  championship   Championship   @relation(fields: [championshipId], references: [id])
+  homeTeamId     String
+  homeTeam       TimeCampeonato @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeamId     String
+  awayTeam       TimeCampeonato @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  date           DateTime?
+  location       String?
+  homeScore      Int            @default(0)
+  awayScore      Int            @default(0)
+  status         String         @default("agendado") // agendado, em_andamento, finalizado
+  round          Int            @default(1)
+  createdAt      DateTime       @default(now())
+  eventos        EventoCampeonato[]
+}
+
+model EventoCampeonato {
+  id             String         @id @default(uuid())
+  jogoId         String
+  jogo           JogoCampeonato @relation(fields: [jogoId], references: [id])
+  type           String         // gol, assistencia, cartao_amarelo, cartao_vermelho
+  playerId       String
+  player         Player         @relation(fields: [playerId], references: [id])
+  teamId         String
+  team           TimeCampeonato @relation(fields: [teamId], references: [id])
+  minute         Int            @default(0)
+  createdAt      DateTime       @default(now())
+}
+
+model Player {
+  id        String          @id @default(uuid())
+  name      String
+  stars     Float           @default(0)
+  active    Boolean         @default(true)
+  userId    String
+  user      User            @relation(fields: [userId], references: [id])
+  createdAt DateTime        @default(now())
+  stats     PlayerStats?
+  inscritos PeladaJogador[]
+  inscritosCampeonato JogadorTime[]
+  eventosCampeonato   EventoCampeonato[]
+  estatisticaPelada   EstatisticaJogadorPelada?
+}
+
+model Pelada {
+  id                     String          @id @default(uuid())
+  title                  String
+  date                   DateTime
+  location               String?
+  playersPerTeam         Int             @default(5)
+  timesSimultaneos       Int             @default(2)
+  duracaoMinutos         Int             @default(10)
+  valorPorJogador        Float?
+  valorTotal             Float           @default(0)
+  coletes                String          @default("#FF0000,#0000FF") 
+  configPagamentoVisivel Boolean         @default(true)
+  status                 String          @default("agendada")
+  placarCasa             Int             @default(0)
+  placarVisitante        Int             @default(0)
+  cronometroSegundos     Int             @default(0)
+  cronometroAtivo        Boolean         @default(false)
+  timesJogando           String          @default("") 
+  userId                 String
+  user                   User            @relation(fields: [userId], references: [id])
+  createdAt              DateTime        @default(now())
+  inscritos              PeladaJogador[]
+  times                  TimePelada[]
+  events                 Event[]
+}
+
+model PeladaJogador {
+  id                 String   @id @default(uuid())
+  peladaId           String
+  pelada             Pelada   @relation(fields: [peladaId], references: [id])
+  playerId           String
+  player             Player   @relation(fields: [playerId], references: [id])
+  presenceConfirmed  Boolean  @default(false)
+  paymentConfirmed   Boolean  @default(false)
+  ordemChegada       Int      @default(0)
+  createdAt          DateTime @default(now())
+}
+
+model TimePelada {
+  id        String  @id @default(uuid())
+  peladaId  String
+  pelada    Pelada  @relation(fields: [peladaId], references: [id])
+  name      String
+  color     String?
+  players   String  @default("") 
+  vitorias  Int     @default(0)
+  empates   Int     @default(0)
+  derrotas  Int     @default(0)
+  golsPro   Int     @default(0)
+  golsContra Int    @default(0)
+}
+
+model Event {
+  id             String   @id @default(uuid())
+  peladaId       String
+  pelada         Pelada   @relation(fields: [peladaId], references: [id])
+  type           String   
+  playerId       String
+  assistPlayerId String?
+  minute         Int
+  createdAt      DateTime @default(now())
+}
+
+model PlayerStats {
+  id                String @id @default(uuid())
+  playerId          String @unique
+  player            Player @relation(fields: [playerId], references: [id])
+  matchesPlayed     Int    @default(0)
+  goals             Int    @default(0)
+  assists           Int    @default(0)
+  wins              Int    @default(0)
+  draws             Int    @default(0)
+  losses            Int    @default(0)
+  yellowCards       Int    @default(0)
+  redCards          Int    @default(0)
+}
+
+model EstatisticaJogadorPelada {
+  id                 String @id @default(uuid())
+  jogador_id         String @unique
+  player             Player @relation(fields: [jogador_id], references: [id], onDelete: Cascade)
+  total_jogos        Int    @default(0)
+  total_gols         Int    @default(0)
+  total_assistencias Int    @default(0)
+  total_vitorias     Int    @default(0)
+  total_empates      Int    @default(0)
+  total_derrotas     Int    @default(0)
+  media_gols         Float  @default(0.0)
+}

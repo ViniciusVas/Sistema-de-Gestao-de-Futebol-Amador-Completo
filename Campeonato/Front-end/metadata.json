@@ -1,0 +1,6 @@
+{
+  "name": "FutGestão",
+  "description": "Sistema completo para gestão de peladas, times e campeonatos de futebol.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

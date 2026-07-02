@@ -1,0 +1,478 @@
+{
+  "jogadores": [
+    {
+      "nome": "teste",
+      "nivel_estrelas": 3,
+      "ativo": true,
+      "id": "hylbooaji",
+      "createdAt": "2026-06-09T23:28:57.424Z"
+    },
+    {
+      "nome": "teste1",
+      "nivel_estrelas": 3,
+      "ativo": true,
+      "id": "114viacjm",
+      "createdAt": "2026-06-09T23:29:07.394Z"
+    },
+    {
+      "nome": "ge",
+      "nivel_estrelas": 3,
+      "ativo": true,
+      "id": "0gjynercl",
+      "createdAt": "2026-06-10T01:54:14.350Z"
+    },
+    {
+      "nome": "erg",
+      "nivel_estrelas": 3,
+      "ativo": true,
+      "id": "7yfxkdxw9",
+      "createdAt": "2026-06-10T01:54:16.575Z"
+    },
+    {
+      "nome": "rg",
+      "nivel_estrelas": 3,
+      "ativo": true,
+      "id": "h1z8gua4s",
+      "createdAt": "2026-06-10T01:54:20.101Z"
+    },
+    {
+      "nome": "egr",
+      "nivel_estrelas": 3,
+      "ativo": true,
+      "id": "0bmew1nsn",
+      "createdAt": "2026-06-10T01:54:22.269Z"
+    },
+    {
+      "nome": "erg",
+      "nivel_estrelas": 3,
+      "ativo": true,
+      "id": "uwmylo5vd",
+      "createdAt": "2026-06-10T01:54:24.748Z"
+    },
+    {
+      "nome": "erge",
+      "nivel_estrelas": 3,
+      "ativo": true,
+      "id": "153ozr63y",
+      "createdAt": "2026-06-10T01:54:27.079Z"
+    },
+    {
+      "nome": "rge",
+      "nivel_estrelas": 3,
+      "ativo": true,
+      "id": "bx42iak9p",
+      "createdAt": "2026-06-10T01:54:29.382Z"
+    },
+    {
+      "nome": "45t4",
+      "nivel_estrelas": 3,
+      "ativo": true,
+      "id": "4zr2q38z7",
+      "createdAt": "2026-06-10T01:54:31.959Z"
+    },
+    {
+      "nome": "wef",
+      "nivel_estrelas": 3,
+      "ativo": true,
+      "id": "xivu4rbr8",
+      "createdAt": "2026-06-10T01:54:34.513Z"
+    }
+  ],
+  "playerStats": [
+    {
+      "id": "hylbooaji",
+      "playerId": "hylbooaji",
+      "goals": 0,
+      "assists": 0,
+      "wins": 0,
+      "draws": 2,
+      "losses": 0,
+      "matchesPlayed": 2,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": "114viacjm",
+      "playerId": "114viacjm",
+      "goals": 0,
+      "assists": 0,
+      "wins": 0,
+      "draws": 2,
+      "losses": 0,
+      "matchesPlayed": 2,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": "0gjynercl",
+      "playerId": "0gjynercl",
+      "goals": 0,
+      "assists": 0,
+      "wins": 0,
+      "draws": 2,
+      "losses": 0,
+      "matchesPlayed": 2,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": "7yfxkdxw9",
+      "playerId": "7yfxkdxw9",
+      "goals": 0,
+      "assists": 0,
+      "wins": 0,
+      "draws": 2,
+      "losses": 0,
+      "matchesPlayed": 2,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": "h1z8gua4s",
+      "playerId": "h1z8gua4s",
+      "goals": 0,
+      "assists": 0,
+      "wins": 0,
+      "draws": 2,
+      "losses": 0,
+      "matchesPlayed": 2,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": "0bmew1nsn",
+      "playerId": "0bmew1nsn",
+      "goals": 0,
+      "assists": 0,
+      "wins": 0,
+      "draws": 2,
+      "losses": 0,
+      "matchesPlayed": 2,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": "uwmylo5vd",
+      "playerId": "uwmylo5vd",
+      "goals": 0,
+      "assists": 0,
+      "wins": 0,
+      "draws": 2,
+      "losses": 0,
+      "matchesPlayed": 2,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": "153ozr63y",
+      "playerId": "153ozr63y",
+      "goals": 0,
+      "assists": 0,
+      "wins": 0,
+      "draws": 2,
+      "losses": 0,
+      "matchesPlayed": 2,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": "bx42iak9p",
+      "playerId": "bx42iak9p",
+      "goals": 0,
+      "assists": 0,
+      "wins": 0,
+      "draws": 2,
+      "losses": 0,
+      "matchesPlayed": 2,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": "4zr2q38z7",
+      "playerId": "4zr2q38z7",
+      "goals": 0,
+      "assists": 0,
+      "wins": 0,
+      "draws": 2,
+      "losses": 0,
+      "matchesPlayed": 2,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": "xivu4rbr8",
+      "playerId": "xivu4rbr8",
+      "goals": 0,
+      "assists": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "matchesPlayed": 0,
+      "yellowCards": 0,
+      "redCards": 0
+    }
+  ],
+  "peladas": [
+    {
+      "titulo": "Pelada teste",
+      "data_hora": "2026-06-10T12:30",
+      "local": "df",
+      "status": "em_andamento",
+      "jogadores_por_time": 5,
+      "times_simultaneos": 2,
+      "duracao_minutos": 10,
+      "coletes": [
+        "#FF0000",
+        "#0000ff"
+      ],
+      "inscritos": [
+        {
+          "id": "i4qa25n4u",
+          "jogador": "hylbooaji",
+          "jogador_nome": "teste",
+          "jogador_nivel": 3,
+          "ordem_chegada": 1,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "9copptuqo",
+          "jogador": "114viacjm",
+          "jogador_nome": "teste1",
+          "jogador_nivel": 3,
+          "ordem_chegada": 2,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "ynwjawwou",
+          "jogador": "4zr2q38z7",
+          "jogador_nome": "45t4",
+          "jogador_nivel": 3,
+          "ordem_chegada": 3,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "p6bmuvrwb",
+          "jogador": "0bmew1nsn",
+          "jogador_nome": "egr",
+          "jogador_nivel": 3,
+          "ordem_chegada": 4,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "0037u32e2",
+          "jogador": "7yfxkdxw9",
+          "jogador_nome": "erg",
+          "jogador_nivel": 3,
+          "ordem_chegada": 5,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "yfmxrjajj",
+          "jogador": "uwmylo5vd",
+          "jogador_nome": "erg",
+          "jogador_nivel": 3,
+          "ordem_chegada": 6,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "66khywutk",
+          "jogador": "153ozr63y",
+          "jogador_nome": "erge",
+          "jogador_nivel": 3,
+          "ordem_chegada": 7,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "zh8ytxjpc",
+          "jogador": "0gjynercl",
+          "jogador_nome": "ge",
+          "jogador_nivel": 3,
+          "ordem_chegada": 8,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "puou1893b",
+          "jogador": "h1z8gua4s",
+          "jogador_nome": "rg",
+          "jogador_nivel": 3,
+          "ordem_chegada": 9,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "e05s9vu8x",
+          "jogador": "bx42iak9p",
+          "jogador_nome": "rge",
+          "jogador_nivel": 3,
+          "ordem_chegada": 10,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        }
+      ],
+      "placar_casa": 0,
+      "placar_visitante": 0,
+      "cronometro_segundos": 0,
+      "cronometro_ativo": false,
+      "config_pagamento_visivel": true,
+      "eventos": [],
+      "id": "1x3d33x38",
+      "createdAt": "2026-06-10T00:35:04.286Z",
+      "valor_total": 0,
+      "times": [
+        {
+          "id": "9522z2lyp",
+          "nome_time": "Time 2",
+          "order": 1,
+          "jogadores": [
+            {
+              "id": "8bvj802fa",
+              "jogador_id": "114viacjm",
+              "jogador_nome": "teste1",
+              "jogador_nivel": 3
+            },
+            {
+              "id": "e7oeo6zk5",
+              "jogador_id": "7yfxkdxw9",
+              "jogador_nome": "erg",
+              "jogador_nivel": 3
+            },
+            {
+              "id": "98dap1apd",
+              "jogador_id": "4zr2q38z7",
+              "jogador_nome": "45t4",
+              "jogador_nivel": 3
+            },
+            {
+              "id": "7rw8xdrk3",
+              "jogador_id": "hylbooaji",
+              "jogador_nome": "teste",
+              "jogador_nivel": 3
+            },
+            {
+              "id": "rmg8n83gc",
+              "jogador_id": "153ozr63y",
+              "jogador_nome": "erge",
+              "jogador_nivel": 3
+            }
+          ],
+          "soma_estrelas": 15
+        },
+        {
+          "id": "ai1xgfh5m",
+          "nome_time": "Time 1",
+          "order": 2,
+          "jogadores": [
+            {
+              "id": "u7z67niaj",
+              "jogador_id": "uwmylo5vd",
+              "jogador_nome": "erg",
+              "jogador_nivel": 3
+            },
+            {
+              "id": "b7lqzrd5d",
+              "jogador_id": "h1z8gua4s",
+              "jogador_nome": "rg",
+              "jogador_nivel": 3
+            },
+            {
+              "id": "yk2mrrx1f",
+              "jogador_id": "0bmew1nsn",
+              "jogador_nome": "egr",
+              "jogador_nivel": 3
+            },
+            {
+              "id": "iwpn9f11h",
+              "jogador_id": "bx42iak9p",
+              "jogador_nome": "rge",
+              "jogador_nivel": 3
+            },
+            {
+              "id": "v4am8evn4",
+              "jogador_id": "0gjynercl",
+              "jogador_nome": "ge",
+              "jogador_nivel": 3
+            }
+          ],
+          "soma_estrelas": 15
+        }
+      ],
+      "times_jogando": 2
+    },
+    {
+      "titulo": "fs",
+      "data_hora": "2026-06-11T00:16",
+      "local": "ewf",
+      "status": "agendada",
+      "jogadores_por_time": 5,
+      "times_simultaneos": 2,
+      "duracao_minutos": 10,
+      "coletes": [
+        "#FF0000",
+        "#0000FF"
+      ],
+      "inscritos": [
+        {
+          "id": "3rldk3d77",
+          "jogador": "4zr2q38z7",
+          "jogador_nome": "45t4",
+          "jogador_nivel": 3,
+          "ordem_chegada": 1,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "ps40f3sp1",
+          "jogador": "0bmew1nsn",
+          "jogador_nome": "egr",
+          "jogador_nivel": 3,
+          "ordem_chegada": 2,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "c7b7p23pf",
+          "jogador": "uwmylo5vd",
+          "jogador_nome": "erg",
+          "jogador_nivel": 3,
+          "ordem_chegada": 3,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "ap1hdo126",
+          "jogador": "0gjynercl",
+          "jogador_nome": "ge",
+          "jogador_nivel": 3,
+          "ordem_chegada": 4,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        },
+        {
+          "id": "sz0ekmu04",
+          "jogador": "bx42iak9p",
+          "jogador_nome": "rge",
+          "jogador_nivel": 3,
+          "ordem_chegada": 5,
+          "presenca_confirmada": true,
+          "pagamento_confirmado": false
+        }
+      ],
+      "placar_casa": 0,
+      "placar_visitante": 0,
+      "cronometro_segundos": 0,
+      "cronometro_ativo": false,
+      "config_pagamento_visivel": true,
+      "eventos": [],
+      "id": "v437nxar5",
+      "createdAt": "2026-06-11T03:16:30.376Z"
+    }
+  ]
+}
