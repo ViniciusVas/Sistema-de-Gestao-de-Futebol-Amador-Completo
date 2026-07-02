@@ -1,327 +1,531 @@
-﻿# Sistema de Gestao de Futebol Amador
+﻿# Sistema de Gestão de Peladas — Futebol Amador
 
-Sistema web para organizacao e gerenciamento de peladas de futebol amador. A solucao foi desenvolvida para ajudar organizadores a centralizar o cadastro de jogadores, controlar presencas, montar times, acompanhar partidas em andamento e registrar informacoes importantes da pelada.
+Aplicação web para organização e gerenciamento de peladas de futebol amador. O sistema permite que organizadores centralizem informações que normalmente ficam dispersas em mensagens, planilhas ou anotações, como jogadores, confirmações de presença, times, placar, cronômetro, eventos da partida, estatísticas e pagamentos.
 
-## Visao Geral
+> Este projeto corresponde ao módulo **Pelada** do Sistema de Gestão de Futebol Amador. Ele possui um front-end independente e uma API própria.
 
-Organizar uma pelada costuma envolver varios controles manuais: lista de jogadores, confirmacao de presenca, divisao equilibrada dos times, pagamentos, placar, cronometro e estatisticas. Quando essas informacoes ficam espalhadas em conversas, planilhas ou anotacoes, o organizador perde tempo e aumenta a chance de erro.
+## Sumário
 
-Este projeto resolve esse problema com uma aplicacao web dividida em duas partes:
+* [Visão geral](#visão-geral)
+* [Problema e contexto](#problema-e-contexto)
+* [Objetivos](#objetivos)
+* [Funcionalidades](#funcionalidades)
+* [Arquitetura](#arquitetura)
+* [Tecnologias utilizadas](#tecnologias-utilizadas)
+* [Estrutura do projeto](#estrutura-do-projeto)
+* [Pré-requisitos](#pré-requisitos)
+* [Instalação e execução local](#instalação-e-execução-local)
+* [Variáveis de ambiente](#variáveis-de-ambiente)
+* [Principais rotas da API](#principais-rotas-da-api)
+* [Scripts disponíveis](#scripts-disponíveis)
+* [Solução de problemas](#solução-de-problemas)
+* [Segurança e boas práticas](#segurança-e-boas-práticas)
 
-- **Frontend**: interface React usada pelo organizador para acessar o sistema.
-- **Backend**: API Node.js/Express responsavel por autenticacao, regras de negocio e persistencia dos dados.
+## Visão geral
 
-O frontend se comunica com o backend por meio de requisicoes HTTP para a API configurada em `VITE_API_URL`.
+A aplicação foi desenvolvida para apoiar a gestão de peladas recorrentes. Por meio de uma interface web, o organizador pode cadastrar jogadores, criar peladas, controlar inscrições, confirmar presenças, formar times, acompanhar a partida ao vivo e registrar informações que alimentam estatísticas e controles financeiros.
+
+O módulo é dividido em duas partes:
+
+* **Front-end:** interface React utilizada pelo organizador;
+* **Back-end:** API Node.js/Express responsável por autenticação, regras de negócio, comunicação em tempo real e persistência no PostgreSQL.
+
+O front-end consome a API por meio da variável `VITE_API_URL` e se conecta ao Socket.IO por meio de `VITE_SOCKET_URL`.
+
+## Problema e contexto
+
+A organização de uma pelada envolve diversas tarefas operacionais: confirmar participantes, controlar a ordem de chegada, organizar times equilibrados, acompanhar o placar, registrar gols e assistências, calcular pagamentos e manter o histórico dos jogadores.
+
+Quando essas informações ficam distribuídas entre mensagens, planilhas e anotações, aumentam as chances de inconsistências, atrasos e perda de dados. O Sistema de Gestão de Peladas centraliza esses processos em uma única aplicação, proporcionando mais organização e rastreabilidade.
 
 ## Objetivos
 
-- Facilitar o gerenciamento de jogadores de futebol amador.
-- Permitir o cadastro e login de organizadores.
-- Controlar jogadores vinculados a cada organizador.
-- Criar e acompanhar peladas com data, local, duracao e configuracoes de jogo.
-- Adicionar jogadores a uma pelada e controlar ordem de chegada.
-- Confirmar presenca e pagamento dos jogadores.
-- Sortear times de forma aleatoria ou balanceada.
-- Registrar eventos da partida, como gols, assistencias e cartoes.
-- Acompanhar placar e jogo ao vivo.
-- Gerar estatisticas individuais dos jogadores.
-- Oferecer uma base evolutiva para campeonatos e rankings.
+* Centralizar o cadastro e a gestão de jogadores;
+* Permitir cadastro e autenticação de organizadores;
+* Criar e acompanhar peladas com data, horário, local, duração e configurações de jogo;
+* Controlar inscrições, ordem de chegada e confirmação de presença;
+* Formar times de forma aleatória ou balanceada por nível de habilidade;
+* Apoiar o rodízio de equipes durante a pelada;
+* Acompanhar cronômetro e placar ao vivo;
+* Registrar gols, assistências e outros eventos da partida;
+* Gerar estatísticas individuais dos jogadores;
+* Controlar pagamentos e rateio de despesas da pelada.
 
-## Tecnologias Utilizadas
+## Funcionalidades
 
-### Backend
+### Autenticação e organizadores
 
-- Node.js
-- Express
-- Prisma ORM
-- PostgreSQL
-- JWT para autenticacao
-- Bcrypt para criptografia de senhas
-- Socket.IO para recursos em tempo real
-- Dotenv para variaveis de ambiente
-
-### Frontend
-
-- React
-- TypeScript
-- Vite
-- React Router
-- Axios
-- Tailwind CSS
-- Lucide React
-- React Hot Toast
-- Zustand
-- Socket.IO Client
-- DnD Kit / Hello Pangea DnD para interacoes de arrastar e soltar
-
-## Estrutura do Projeto
-
-```txt
-Residencia/
-|-- backend/
-|   |-- prisma/
-|   |   `-- schema.prisma
-|   |-- src/
-|   |   |-- config/
-|   |   |-- controllers/
-|   |   |-- middlewares/
-|   |   |-- routes/
-|   |   |-- services/
-|   |   |-- utils/
-|   |   |-- app.js
-|   |   `-- server.js
-|   |-- package.json
-|   `-- .env
-|
-|-- frontend/
-|   |-- src/
-|   |   |-- components/
-|   |   |-- context/
-|   |   |-- hooks/
-|   |   |-- lib/
-|   |   |-- pages/
-|   |   |-- services/
-|   |   |-- store/
-|   |   |-- types/
-|   |   |-- App.tsx
-|   |   `-- main.tsx
-|   |-- index.html
-|   |-- package.json
-|   |-- tsconfig.json
-|   |-- vite.config.ts
-|   `-- .env
-|
-`-- README.md
-```
-
-## Funcionalidades Implementadas
-
-### Autenticacao
-
-- Cadastro de organizador.
-- Login com email e senha.
-- Geracao de token JWT.
-- Protecao de rotas no backend.
-- Controle de sessao no frontend.
+* Cadastro de organizadores;
+* Login com e-mail e senha;
+* Geração e validação de token JWT;
+* Proteção de rotas da API;
+* Recuperação de senha por rota própria.
 
 ### Jogadores
 
-- Criar jogador.
-- Listar jogadores do organizador autenticado.
-- Editar dados do jogador.
-- Desativar jogador por soft delete.
-- Definir nivel de habilidade por estrelas.
+* Cadastro de jogadores;
+* Listagem de jogadores vinculados ao organizador autenticado;
+* Edição de dados;
+* Desativação de jogador;
+* Definição de nível de habilidade por estrelas.
 
-### Peladas
+### Peladas e inscrições
 
-- Criar pelada com data, local e configuracoes.
-- Listar peladas do organizador.
-- Detalhar uma pelada.
-- Adicionar jogadores inscritos.
-- Remover jogadores da pelada.
-- Reordenar jogadores por ordem de chegada.
-- Confirmar presenca.
-- Controlar confirmacao de pagamento.
+* Criação, listagem, detalhamento e atualização de peladas;
+* Inclusão e remoção de jogadores inscritos;
+* Reordenação da lista de participantes;
+* Confirmação de presença;
+* Controle de jogadores excedentes quando houver mais participantes que vagas simultâneas.
 
-### Sorteio e Times
+### Sorteio, times e rodízio
 
-- Sortear times de forma aleatoria.
-- Sortear times buscando equilibrio por nivel dos jogadores.
-- Criar fila de times quando houver mais jogadores que vagas simultaneas.
-- Ajustar jogadores entre times.
-- Confirmar formacao dos times.
+* Sorteio aleatório de times;
+* Sorteio balanceado de acordo com o nível dos jogadores;
+* Ajuste manual de jogadores entre equipes;
+* Confirmação e restauração da formação de times;
+* Consulta da ordem dos times;
+* Substituição de jogadores;
+* Rodízio de equipes e encerramento de partida com entrada do próximo time.
 
-### Jogo ao Vivo
+### Jogo ao vivo e eventos
 
-- Acompanhar placar.
-- Controlar cronometro.
-- Registrar eventos da partida.
-- Registrar gols, assistencias e cartoes.
-- Usar Socket.IO para comunicacao em tempo real.
+* Início, pausa e reinício do cronômetro;
+* Atualização de placar;
+* Registro e listagem de eventos da partida;
+* Registro de gols, assistências e cartões;
+* Comunicação em tempo real com Socket.IO.
 
-### Estatisticas e Pagamentos
+### Estatísticas e pagamentos
 
-- Registrar pagamentos dos jogadores.
-- Consultar informacoes financeiras da pelada.
-- Gerar estatisticas por jogador.
+* Finalização de pelada e processamento de estatísticas;
+* Consulta de estatísticas por jogador;
+* Consulta e atualização de pagamentos;
+* Cálculo do rateio;
+* Configuração da visibilidade de pagamentos.
 
-## Requisitos
+## Arquitetura
 
-Antes de executar o projeto, instale:
+```text
+┌─────────────────────────────────────┐
+│            Front-end                │
+│   React + TypeScript + Vite         │
+│      http://localhost:5173          │
+└──────────────────┬──────────────────┘
+                   │ HTTP + Socket.IO
+                   ▼
+┌─────────────────────────────────────┐
+│             Back-end                │
+│ Node.js + Express + Socket.IO       │
+│      http://localhost:3001          │
+└──────────────────┬──────────────────┘
+                   │ Prisma ORM
+                   ▼
+┌─────────────────────────────────────┐
+│            PostgreSQL               │
+│             futebol_db              │
+└─────────────────────────────────────┘
+```
 
-- Node.js 18 ou superior
-- npm
-- PostgreSQL
+## Tecnologias utilizadas
 
-Tambem e necessario ter um banco PostgreSQL criado para o projeto.
+### Back-end
 
-## Configuracao do Backend
+* Node.js;
+* Express;
+* Prisma ORM;
+* PostgreSQL;
+* JSON Web Token (JWT);
+* bcrypt;
+* Socket.IO;
+* CORS;
+* dotenv;
+* nodemon.
 
-Acesse a pasta do backend:
+### Front-end
+
+* React;
+* TypeScript;
+* Vite;
+* React Router;
+* Axios;
+* Tailwind CSS;
+* Lucide React;
+* React Hot Toast;
+* Zustand;
+* Socket.IO Client;
+* DnD Kit;
+* Hello Pangea DnD;
+* Motion.
+
+## Estrutura do projeto
+
+```text
+Pelada/
+├── backend/
+│   ├── prisma/
+│   │   └── schema.prisma
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── middlewares/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   ├── app.js
+│   │   └── server.js
+│   ├── package.json
+│   └── .env
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── hooks/
+│   │   ├── lib/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── store/
+│   │   ├── types/
+│   │   ├── App.tsx
+│   │   └── main.tsx
+│   ├── package.json
+│   ├── vite.config.ts
+│   └── .env
+│
+└── README.md
+```
+
+## Pré-requisitos
+
+Antes de iniciar, instale:
+
+* Node.js 18 ou superior;
+* npm;
+* PostgreSQL;
+* Git, caso o repositório ainda não esteja em sua máquina.
+
+Verifique as instalações:
+
+```bash
+node --version
+npm --version
+psql --version
+git --version
+```
+
+## Instalação e execução local
+
+A execução local requer dois terminais: um para o back-end e outro para o front-end.
+
+### 1. Acesse a pasta do módulo
+
+A partir da raiz do repositório:
+
+```bash
+cd Pelada
+```
+
+### 2. Crie o banco de dados
+
+No PostgreSQL, crie o banco de dados utilizado pelo projeto:
+
+```sql
+CREATE DATABASE futebol_db;
+```
+
+### 3. Configure e execute o back-end
+
+Em um terminal:
 
 ```bash
 cd backend
-```
-
-Instale as dependencias:
-
-```bash
 npm install
 ```
 
-Crie um arquivo `.env` dentro da pasta `backend`:
+Crie o arquivo `backend/.env`:
 
 ```env
-DATABASE_URL="postgresql://usuario:senha@localhost:5432/futebol"
-JWT_SECRET="sua_chave_secreta"
+DATABASE_URL="postgresql://postgres:SUA_SENHA@localhost:5432/futebol_db?schema=public"
+JWT_SECRET="substitua-por-uma-chave-longa-e-aleatoria"
 FRONTEND_URL="http://localhost:5173"
 PORT=3001
 ```
 
-Substitua `usuario`, `senha` e `futebol` pelos dados reais do seu PostgreSQL.
+Ajuste o usuário, a senha, o host, a porta e o nome do banco de acordo com o seu PostgreSQL.
 
-Execute as migrations e gere o client do Prisma:
+Gere o Prisma Client e aplique as migrações:
 
 ```bash
-npx prisma migrate dev
 npx prisma generate
+npx prisma migrate dev
 ```
 
-Inicie o backend:
+Inicie a API:
 
 ```bash
 npm run dev
 ```
 
-Por padrao, a API ficara disponivel em:
+A API ficará disponível em:
 
-```txt
-http://localhost:3001/api
+```text
+http://localhost:3001
 ```
 
-## Configuracao do Frontend
+Para verificar se a API está respondendo, acesse:
 
-Acesse a pasta do frontend:
+```text
+http://localhost:3001/api/test
+```
+
+### 4. Configure e execute o front-end
+
+Em outro terminal, a partir da pasta `Pelada`:
 
 ```bash
 cd frontend
-```
-
-Instale as dependencias:
-
-```bash
 npm install
 ```
 
-Crie ou ajuste o arquivo `.env` dentro da pasta `frontend`:
+Crie ou ajuste o arquivo `frontend/.env`:
 
 ```env
 VITE_API_URL="http://localhost:3001/api"
 VITE_SOCKET_URL="http://localhost:3001"
 ```
 
-Inicie o frontend:
+Inicie o front-end na porta usada pelo módulo de Seleção:
 
 ```bash
-npm run dev
+npm run dev -- --port 5173
 ```
 
-Por padrao, o Vite exibira a URL local da aplicacao, geralmente:
+O front-end ficará disponível em:
 
-```txt
+```text
 http://localhost:5173
 ```
 
-## Como Executar o Sistema
+> O `vite.config.ts` atual não fixa uma porta para o front-end. Por esse motivo, o parâmetro `--port 5173` deve ser usado para manter o endereço alinhado com a aplicação **Seleção**.
 
-Use dois terminais:
+### 5. Acesse o sistema
 
-### Terminal 1 - Backend
+Com os dois processos em execução, abra:
 
-```bash
-cd backend
-npm run dev
+```text
+http://localhost:5173
 ```
 
-### Terminal 2 - Frontend
+Quando a aplicação de Seleção estiver em execução, o acesso também poderá ser realizado pelo botão **Pelada**, configurado para redirecionar ao endereço definido em `VITE_PELADA_URL`.
 
-```bash
-cd frontend
-npm run dev
+## Variáveis de ambiente
+
+### Back-end — `backend/.env`
+
+| Variável       | Descrição                                     |
+| -------------- | --------------------------------------------- |
+| `DATABASE_URL` | String de conexão do Prisma com o PostgreSQL  |
+| `JWT_SECRET`   | Chave usada para assinar e validar tokens JWT |
+| `FRONTEND_URL` | Origem permitida pelo CORS e pelo Socket.IO   |
+| `PORT`         | Porta de execução da API; o padrão é `3001`   |
+
+Exemplo:
+
+```env
+DATABASE_URL="postgresql://postgres:SUA_SENHA@localhost:5432/futebol_db?schema=public"
+JWT_SECRET="uma-chave-longa-e-aleatoria"
+FRONTEND_URL="http://localhost:5173"
+PORT=3001
 ```
 
-Depois acesse o endereco exibido pelo Vite no navegador.
+### Front-end — `frontend/.env`
 
-## Principais Rotas da API
+| Variável          | Descrição                            |
+| ----------------- | ------------------------------------ |
+| `VITE_API_URL`    | URL base da API consumida pelo Axios |
+| `VITE_SOCKET_URL` | URL do servidor Socket.IO            |
 
-Todas as rotas protegidas devem receber o token JWT no header:
+Exemplo:
 
-```txt
+```env
+VITE_API_URL="http://localhost:3001/api"
+VITE_SOCKET_URL="http://localhost:3001"
+```
+
+Após alterar qualquer arquivo `.env`, reinicie o processo correspondente.
+
+## Principais rotas da API
+
+A API possui a rota de teste:
+
+| Método | Rota        | Descrição                          |
+| ------ | ----------- | ---------------------------------- |
+| `GET`  | `/api/test` | Verifica se a API está em execução |
+
+As rotas protegidas exigem o token JWT no cabeçalho:
+
+```text
 Authorization: Bearer SEU_TOKEN
 ```
 
-### Autenticacao
+### Autenticação
 
-| Metodo | Rota | Descricao |
-| --- | --- | --- |
-| POST | `/api/auth/register` | Cadastra um organizador |
-| POST | `/api/auth/login` | Realiza login e retorna token |
-| GET | `/api/perfil` | Valida acesso autenticado |
+| Método | Rota                        | Descrição                     |
+| ------ | --------------------------- | ----------------------------- |
+| `POST` | `/api/auth/register`        | Cadastra um organizador       |
+| `POST` | `/api/auth/login`           | Realiza login                 |
+| `POST` | `/api/auth/forgot-password` | Solicita recuperação de senha |
+| `GET`  | `/api/perfil`               | Valida o acesso autenticado   |
 
 ### Jogadores
 
-| Metodo | Rota | Descricao |
-| --- | --- | --- |
-| POST | `/api/jogadores` | Cria jogador |
-| GET | `/api/jogadores` | Lista jogadores |
-| PUT | `/api/jogadores/:id` | Edita jogador |
-| DELETE | `/api/jogadores/:id` | Desativa jogador |
+| Método   | Rota                 | Descrição                                                 |
+| -------- | -------------------- | --------------------------------------------------------- |
+| `POST`   | `/api/jogadores`     | Cria um jogador                                           |
+| `GET`    | `/api/jogadores`     | Lista jogadores do organizador                            |
+| `PUT`    | `/api/jogadores/:id` | Atualiza um jogador                                       |
+| `DELETE` | `/api/jogadores/:id` | Desativa ou exclui um jogador conforme a regra de negócio |
 
-### Peladas
+### Peladas e participantes
 
-| Metodo | Rota | Descricao |
-| --- | --- | --- |
-| POST | `/api/peladas` | Cria pelada |
-| GET | `/api/peladas` | Lista peladas |
-| GET | `/api/peladas/:id` | Detalha pelada |
-| PUT | `/api/peladas/:id` | Atualiza pelada |
-| POST | `/api/peladas/:id/jogadores` | Adiciona jogador a pelada |
-| DELETE | `/api/peladas/:id/jogadores/:jogadorId` | Remove jogador da pelada |
-| PUT | `/api/peladas/:id/jogadores/reordenar` | Reordena jogadores |
-| PUT | `/api/peladas/:id/jogadores/confirmar-presenca` | Confirma presenca |
+| Método   | Rota                                            | Descrição                    |
+| -------- | ----------------------------------------------- | ---------------------------- |
+| `POST`   | `/api/peladas`                                  | Cria uma pelada              |
+| `GET`    | `/api/peladas`                                  | Lista peladas do organizador |
+| `GET`    | `/api/peladas/:id`                              | Detalha uma pelada           |
+| `PUT`    | `/api/peladas/:id`                              | Atualiza uma pelada          |
+| `POST`   | `/api/peladas/:id/jogadores`                    | Adiciona jogador à pelada    |
+| `DELETE` | `/api/peladas/:id/jogadores/:jogadorId`         | Remove jogador da pelada     |
+| `PUT`    | `/api/peladas/:id/jogadores/reordenar`          | Reordena jogadores           |
+| `PUT`    | `/api/peladas/:id/jogadores/confirmar-presenca` | Confirma presença            |
 
-### Sorteio, Times e Jogo
+### Sorteio, times e rodízio
 
-| Metodo | Rota | Descricao |
-| --- | --- | --- |
-| POST | `/api/peladas/:id/sortear` | Sorteia times |
-| GET | `/api/peladas/:id/times` | Lista times da pelada |
-| PUT | `/api/times/ajustar` | Ajusta jogador entre times |
-| PUT | `/api/peladas/:id/confirmar-times` | Confirma times |
-| GET/POST/PUT | `/api/jogo/...` | Rotas de jogo ao vivo |
+| Método | Rota                                        | Descrição                             |
+| ------ | ------------------------------------------- | ------------------------------------- |
+| `POST` | `/api/peladas/:id/sortear`                  | Sorteia os times                      |
+| `GET`  | `/api/peladas/:id/times`                    | Lista os times da pelada              |
+| `POST` | `/api/peladas/:id/times/ajustar`            | Ajusta jogadores entre times          |
+| `POST` | `/api/peladas/:id/times/restaurar`          | Restaura a formação anterior de times |
+| `POST` | `/api/peladas/:id/times/confirmar`          | Confirma a formação dos times         |
+| `GET`  | `/api/peladas/:id/timesordem`               | Lista a ordem dos times               |
+| `POST` | `/api/peladas/:id/substituir`               | Substitui jogador em um time          |
+| `POST` | `/api/peladas/:id/rodar-times`              | Executa o rodízio de equipes          |
+| `POST` | `/api/peladas/:id/partida/encerrar-e-rodar` | Encerra a partida e executa o rodízio |
 
-## Scripts Disponiveis
+### Jogo ao vivo e eventos
 
-### Backend
+| Método | Rota                                 | Descrição                  |
+| ------ | ------------------------------------ | -------------------------- |
+| `POST` | `/api/jogo/:id/cronometro/iniciar`   | Inicia o cronômetro        |
+| `POST` | `/api/jogo/:id/cronometro/pausar`    | Pausa o cronômetro         |
+| `POST` | `/api/jogo/:id/cronometro/reiniciar` | Reinicia o cronômetro      |
+| `POST` | `/api/jogo/:id/placar`               | Atualiza o placar          |
+| `POST` | `/api/peladas/:id/eventos`           | Registra um evento         |
+| `GET`  | `/api/peladas/:id/eventos`           | Lista os eventos da pelada |
+
+### Estatísticas e pagamentos
+
+| Método | Rota                                      | Descrição                                      |
+| ------ | ----------------------------------------- | ---------------------------------------------- |
+| `POST` | `/api/peladas/:id/finalizar`              | Finaliza a pelada e processa estatísticas      |
+| `GET`  | `/api/jogadores/:id/estatisticas`         | Consulta estatísticas do jogador               |
+| `GET`  | `/api/peladas/:id/pagamentos`             | Lista pagamentos da pelada                     |
+| `PUT`  | `/api/peladas/:id/pagamentos/:jogador_id` | Atualiza a situação de pagamento de um jogador |
+| `GET`  | `/api/peladas/:id/rateio`                 | Calcula o rateio da pelada                     |
+| `PUT`  | `/api/peladas/:id/config-pagamento`       | Atualiza a configuração de pagamentos          |
+
+## Scripts disponíveis
+
+### Back-end
+
+| Comando                  | Descrição                                        |
+| ------------------------ | ------------------------------------------------ |
+| `npm run dev`            | Inicia o servidor com nodemon                    |
+| `npm start`              | Inicia o servidor com Node.js                    |
+| `npx prisma generate`    | Gera o Prisma Client                             |
+| `npx prisma migrate dev` | Cria e aplica migrações de desenvolvimento       |
+| `npx prisma studio`      | Abre uma interface visual para consulta do banco |
+
+### Front-end
+
+| Comando                      | Descrição                                         |
+| ---------------------------- | ------------------------------------------------- |
+| `npm run dev`                | Inicia o Vite em desenvolvimento                  |
+| `npm run dev -- --port 5173` | Inicia o Vite na porta usada pela tela de Seleção |
+| `npm run build`              | Gera a versão de produção                         |
+| `npm run preview`            | Visualiza localmente a versão gerada              |
+| `npm run lint`               | Executa verificação de tipos com TypeScript       |
+
+## Solução de problemas
+
+### Erro ao conectar ao PostgreSQL
+
+Verifique se o PostgreSQL está em execução, se o banco `futebol_db` foi criado e se a variável `DATABASE_URL` está correta.
+
+Depois, execute:
 
 ```bash
-npm run dev
-npm start
+npx prisma generate
+npx prisma migrate dev
 ```
 
-### Frontend
+### Erro relacionado ao Prisma Client
+
+Na pasta `backend`, execute:
 
 ```bash
-npm run dev
-npm run build
-npm run preview
-npm run lint
+npx prisma generate
 ```
 
-## Observacoes Importantes
+Em seguida, reinicie a API.
 
-- O backend oficial do projeto fica na pasta `backend`.
-- O frontend deve consumir a API por `VITE_API_URL`.
-- Arquivos antigos de backend de teste dentro da pasta `frontend` nao fazem parte da arquitetura atual.
-- O arquivo `.env` nao deve ser enviado para repositorios publicos.
-- Nunca publique valores reais de `DATABASE_URL`, `JWT_SECRET` ou outros segredos.
+### Erro de CORS ou falha de conexão com a API
+
+Confira se os valores abaixo usam os endereços corretos:
+
+```env
+# backend/.env
+FRONTEND_URL="http://localhost:5173"
+
+# frontend/.env
+VITE_API_URL="http://localhost:3001/api"
+VITE_SOCKET_URL="http://localhost:3001"
+```
+
+Também confirme que o front-end está em execução na porta `5173` e a API na porta `3001`.
+
+### O front-end iniciou em outra porta
+
+Pare o processo do Vite e execute:
+
+```bash
+npm run dev -- --port 5173
+```
+
+Se a porta `5173` estiver ocupada, encerre o processo que a utiliza ou ajuste a variável `VITE_PELADA_URL` da aplicação Seleção para o novo endereço.
+
+### Erro: `lucide-react ... could not be resolved`
+
+Na pasta `frontend`, execute:
+
+```bash
+npm install
+```
+
+Depois, inicie o projeto novamente.
+
+### O Socket.IO não conecta
+
+Confirme que a API está em execução e que `VITE_SOCKET_URL` aponta para a origem da API, sem o sufixo `/api`:
+
+```env
+VITE_SOCKET_URL="http://localhost:3001"
+```
+
+## Segurança e boas práticas
+
+* Não envie arquivos `.env` para repositórios públicos;
+* Não publique senhas, `DATABASE_URL` reais, tokens ou valores de `JWT_SECRET`;
+* Use uma chave JWT longa e aleatória;
+* Mantenha `FRONTEND_URL` restrito à origem autorizada;
+* Crie um arquivo `.env.example` com nomes de variáveis e valores fictícios para facilitar a configuração por outras pessoas.

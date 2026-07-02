@@ -3,7 +3,7 @@ import { ArrowRight, Trophy, UsersRound } from "lucide-react";
 const MODE_URLS = {
   pelada: import.meta.env.VITE_PELADA_URL || "http://localhost:5173",
   campeonato:
-    import.meta.env.VITE_CAMPEONATO_URL || "http://localhost:5174",
+    import.meta.env.VITE_CAMPEONATO_URL || "http://localhost:3000",
 };
 
 export default function ModeSelection() {
